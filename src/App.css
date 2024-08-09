@@ -14,7 +14,8 @@
 }
 
 .app-main {
-  flex: 1;
+  background: black;
+  color: #fff;
 }
 
 .app-footer {
