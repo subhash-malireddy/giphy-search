@@ -1,9 +1,16 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import GiphySearch from './components/GiphySearch';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const appTitle = screen.getByText('Giphy Search');
-  expect(appTitle).toBeInTheDocument();
+jest.mock('./components/GiphySearch', () => ({
+  __esModule: true,
+  default: () => <div>Giphy Search component</div>
+}))
+
+describe('Testing App component', () => {
+  it('renders GiphySearch component', () => {
+    render(<App />);
+
+    expect(screen.getByText('Giphy Search component')).toBeInTheDocument();
+  });
 });
