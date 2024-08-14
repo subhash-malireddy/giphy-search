@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
+import { GiphySearchResponse } from './types';
+import { Maybe } from '../../utility/utilityTypes';
 
 interface UseSearchForGifsArgs {
     queryString?: string;
@@ -8,13 +10,13 @@ interface UseSearchForGifsArgs {
 }
 
 const useSearchForGifs = ({ queryString = '', shouldSearch = false, resetShouldSearch }: UseSearchForGifsArgs) => {
-    const [data, setData] = useState(null);
+    const [response, setResponse] = useState<Maybe<GiphySearchResponse>>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error>(null);
 
     useEffect(() => {
         if (!queryString || !shouldSearch) return;
-        const fetchData = async () => {
+        const searchGiphys = async () => {
             const searchParams = new URLSearchParams();
             searchParams.append('api_key', process.env.REACT_APP_giphy_api_key)
             searchParams.append('q', queryString);
@@ -24,7 +26,7 @@ const useSearchForGifs = ({ queryString = '', shouldSearch = false, resetShouldS
                 const response = await axiosInstance.get('', {
                     params: searchParams
                 });
-                setData(response.data);
+                setResponse(response.data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -35,10 +37,10 @@ const useSearchForGifs = ({ queryString = '', shouldSearch = false, resetShouldS
             }
         };
 
-        fetchData();
+        searchGiphys();
     }, [queryString, shouldSearch]);
 
-    return { data, loading, error };
+    return { response, loading, error };
 };
 
 export default useSearchForGifs;
