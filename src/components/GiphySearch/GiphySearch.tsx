@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './GiphySearch.css'
-import useSearchForGifs from '../../hooks/useSearchForGifs';
+import GiphysMasonary from './GiphysMasonary';
 const GiphySearch = () => {
 
     const [queryString, setQueryString] = useState('');
     const [shouldSearch, setshouldSearch] = useState(false);
+    const gifsGridContainer = useRef<HTMLDivElement>(null);
 
     const handleSearchQueryChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         e.stopPropagation();
@@ -20,24 +21,14 @@ const GiphySearch = () => {
         setshouldSearch(false);
     }
 
-    const { data, loading, error } = useSearchForGifs({ queryString, shouldSearch, resetShouldSearch });
-
-    if (loading) return <>`loading...`</>
-    if (error) return <>`error: ${error.message}`</>
-
-    if (data) console.log(data)
 
     return (
-        <div className='wrapper'>
+        < div className='wrapper'>
             <form onSubmit={handleSubmit} className='search-form'>
                 <input type="text" className="search-input" placeholder='Find the perfect GIF to express your mood!' value={queryString} onChange={handleSearchQueryChange} />
                 <button>Search</button>
             </form>
-            <div className='search-output-wrapper'>
-                {
-                    data && queryString && <h3>Search results for <em>{`${queryString}`}</em></h3>
-                }
-            </div>
+            <GiphysMasonary queryString={queryString} shouldSearch={shouldSearch} resetShouldSearch={resetShouldSearch} />
         </div>
     )
 }
@@ -45,5 +36,6 @@ const GiphySearch = () => {
 export default GiphySearch;
 
 /**
- * 1. 
+ * 1. the most important thing is to decide how many columns you want to display on the screen based on the screen size.
+ * 2. Remember the image width is 200px
  */
