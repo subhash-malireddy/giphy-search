@@ -1,4 +1,8 @@
 .wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 16px;
+    height: 100%;
     padding: 16px;
 }
 

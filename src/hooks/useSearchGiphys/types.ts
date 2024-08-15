@@ -37,12 +37,12 @@ interface Images {
     // downsized_medium: DownsizedMedium
     // downsized_small: DownsizedSmall
     // downsized_still: DownsizedStill
-    fixed_height: FixedHeight
+    // fixed_height: FixedHeight
     // fixed_height_downsampled: FixedHeightDownsampled
     // fixed_height_small: FixedHeightSmall
     // fixed_height_small_still: FixedHeightSmallStill
     // fixed_height_still: FixedHeightStill
-    // fixed_width: FixedWidth
+    fixed_width: FixedWidth
     // fixed_width_downsampled: FixedWidthDownsampled
     // fixed_width_small: FixedWidthSmall
     // fixed_width_small_still: FixedWidthSmallStill
@@ -70,7 +70,7 @@ interface Pagination {
     offset: number
 }
 
-interface FixedHeight {
+interface FixedWidth {
     height: string
     width: string
     size: string

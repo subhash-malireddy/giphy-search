@@ -1,0 +1,14 @@
+.giphys-masonary {
+    flex: 1 1 auto;
+}
+
+.giphy {
+    display: flex;
+    justify-content: space-evenly;
+    min-height: 75px;
+}
+
+.giphy img {
+    /* width: 100%;
+    object-fit: cover; */
+}
