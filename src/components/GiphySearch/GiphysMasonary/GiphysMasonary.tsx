@@ -6,10 +6,10 @@ import {
     CellMeasurerCache,
     createMasonryCellPositioner,
     Masonry,
-    AutoSizer
+    MasonryProps,
 } from 'react-virtualized';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface GiphysMasonryProps {
     queryString: string,
@@ -70,11 +70,11 @@ const MasonryComponent = ({ giphyArray, containerDimensions }: {
 }) => {
     const masonaryRef = useRef(null);
 
-    const cellRenderer = useCallback(function ({ index, key, parent, style }) {
+    const cellRenderer: MasonryProps['cellRenderer'] = useCallback(function ({ index, key, parent, style }) {
         const item = giphyArray[index];
 
         return (
-            <CellMeasurer cache={cache} index={index} parent={parent} key={`${item.id}_${Date.now()}`}>
+            <CellMeasurer cache={cache} index={index} parent={parent} key={item.id}>
                 <div style={style} className="giphy-wrapper">
                     {Giphy(item)}
                 </div>
@@ -117,6 +117,7 @@ const MasonryComponent = ({ giphyArray, containerDimensions }: {
             width={columnCount * GIF_FIXED_SMALL_WIDTH + ((columnCount - 1) * spacer)}
             ref={masonaryRef}
             className='giphys-masonry'
+            autoHeight={false}
         />
     )
 }
