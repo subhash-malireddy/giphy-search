@@ -1,19 +1,17 @@
-.giphys-masonary {
+.giphys-masonary-container {
     flex: 1 1 auto;
 }
 
-/* .giphys-masonary div {
-    height: 100%;
-    width: 100%;
-} */
-
-.giphy {
-    display: flex;
-    justify-content: space-evenly;
-    min-height: 75px;
+.giphys-masonry {
+    margin: auto;
+    scrollbar-gutter: stable;
+    transition: width 0.2s ease-out;
 }
 
-.giphy img {
-    /* width: 100%;
-    object-fit: cover; */
+.giphy-wrapper>a {
+    display: block;
+}
+
+.giphy-wrapper>a>img {
+    background-color: #663399;
 }

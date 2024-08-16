@@ -9,158 +9,130 @@ import {
     AutoSizer
 } from 'react-virtualized';
 
-import ImageMeasurer from 'react-virtualized-image-measurer';
-import { useCallback, useEffect, useId, useMemo, useRef } from "react";
-import { data } from "vfile";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-interface GifsGridProps {
+interface GiphysMasonryProps {
     queryString: string,
     shouldSearch: boolean,
     resetShouldSearch: () => void;
 }
 
 const GIF_FIXED_SMALL_WIDTH = 200;
-// * Just an assumed value
-const GIF_FIXED_SMALL_HEIGHT = 100;
 
-const GifsGrid = ({ queryString, shouldSearch, resetShouldSearch }: GifsGridProps) => {
+const GiphysMasonry = ({ queryString, shouldSearch, resetShouldSearch }: GiphysMasonryProps) => {
 
+    const [containerDimensions, setContainerDimensions] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
+    const masonaryContainerRef = useRef<HTMLDivElement>(null);
     const { response, loading, error } = useSearchForGifs({ queryString, shouldSearch, resetShouldSearch });
-    // const containerRef = useRef<HTMLDivElement>(null);
 
-    if (error) return <>`error: ${error.message}`</>
+
+    useEffect(() => {
+        if (!masonaryContainerRef.current) return;
+        const updateContainerDimensions = () => {
+            if (containerDimensions.height === masonaryContainerRef.current.offsetHeight || containerDimensions.width === masonaryContainerRef.current.offsetWidth) return;
+            setContainerDimensions({
+                height: masonaryContainerRef.current.offsetHeight,
+                width: masonaryContainerRef.current.offsetWidth,
+            })
+        }
+        updateContainerDimensions();
+    }, [containerDimensions])
+
+    if (error) return <>{`error: ${error.message}`}</>
     if (loading) return <>loading...</>
 
-    if (response) console.log(response);
-
-
     return (
-        // <div className='giphys-masonary'>
-        //     {
-        //         response && response.data && (
-        //             <>
-        //                 {/* <h3>Search results for <em>{`${queryString}`}</em></h3>
-        //                 {
-        //                     response.data.map(giphy => {
-        //                         return <Gif {...giphy} key={giphy.id} />
-        //                     })
-        //                 } */}
-        //                 <Masonry items={response.data} render={Gif} columnWidth={GIF_FIXED_SMALL_WIDTH} overscanBy={1} columnGutter={8} />
-        //             </>
-        //         )
-        //     }
-        // </div>
-        <>
+        <div className="giphys-masonary-container" ref={masonaryContainerRef}>
             {
                 response && response.data && (
-                    <div className="giphys-masonary" >
-
-                        {/* <ImageMeasurer
-                            items={response.data}
-                            image={giphy => giphy.images.fixed_width.url}
-                            defaultHeight={GIF_FIXED_SMALL_HEIGHT}
-                            defaultWidth={GIF_FIXED_SMALL_WIDTH}
-                            keyMapper={(giphy) => giphy.id}
-                        >
-                            {({ itemsWithSizes }) => <MasonryComponent itemsWithSizes={itemsWithSizes} />}
-
-                        </ImageMeasurer> */}
-                        <MasonryComponent itemsWithSizes={response.data} />
-                    </div>
+                    <MasonryComponent giphyArray={response.data} containerDimensions={containerDimensions} />
                 )
             }
-        </>
+        </div>
     )
 }
 
-export default GifsGrid;
+export default GiphysMasonry;
 
 
 const cache = new CellMeasurerCache({
-    defaultHeight: 250,
+    defaultHeight: 100,
     defaultWidth: 200,
     fixedWidth: true,
 });
 
-const cellPositioner = createMasonryCellPositioner({
-    cellMeasurerCache: cache,
-    columnCount: 5,
-    columnWidth: GIF_FIXED_SMALL_WIDTH,
-    spacer: 10,
-})
-const MasonryComponent = ({ itemsWithSizes }) => {
-    console.log("🚀 ~ MasonryComponent ~ itemsWithSizes:", itemsWithSizes)
-    // Default sizes help Masonry decide how many images to batch-measure
+const MasonryComponent = ({ giphyArray, containerDimensions }: {
+    giphyArray: Partial<GiphyObject>[],
+    containerDimensions: {
+        width: number;
+        height: number;
+    }
+}) => {
+    const masonaryRef = useRef(null);
 
-    function cellRenderer({ index, key, parent, style }) {
-        // const { item, size } = itemsWithSizes[index];
-        const item = itemsWithSizes[index];
-        const columnWidth = GIF_FIXED_SMALL_WIDTH;
-        // const defaultHeight = GIF_FIXED_SMALL_HEIGHT;
-        // const height = columnWidth * (size.height / size.width) || defaultHeight;
-
+    const cellRenderer = useCallback(function ({ index, key, parent, style }) {
+        const item = giphyArray[index];
 
         return (
-            <CellMeasurer cache={cache} index={index} parent={parent} key={item.id}>
-                <div style={style}>
-                    <img
-                        src={item.images.fixed_width.url}
-                        alt={item.alt_text}
-                        style={{
-                            height: item.images.fixed_width.height,
-                            width: item.images.fixed_width.width,
-                        }}
-                    />
-                    {/* <h4>{item.title}</h4> */}
+            <CellMeasurer cache={cache} index={index} parent={parent} key={`${item.id}_${Date.now()}`}>
+                <div style={style} className="giphy-wrapper">
+                    {Giphy(item)}
                 </div>
             </CellMeasurer>
         );
-    }
+    }, [])
 
+    const columnCount = Math.floor(containerDimensions.width / GIF_FIXED_SMALL_WIDTH) - 1;
+    const spacer = 10;
+    const cellPositionerDefault = {
+        cellMeasurerCache: cache,
+        columnCount,
+        columnWidth: GIF_FIXED_SMALL_WIDTH,
+        spacer,
+    };
+    const cellPositioner = createMasonryCellPositioner(cellPositionerDefault)
 
+    useEffect(function reComputeLayout() {
+        cache.clearAll();
+        cellPositioner.reset(cellPositionerDefault)
+        masonaryRef.current?.clearCellPositions();
+    }, [giphyArray])
 
-    // console.log("🚀 ~ MasonryComponent ~ cellPositioner:", cellPositioner)
+    useEffect(() => {
+        const masonaryElement = document.querySelector('.giphys-masonry');
+        if (masonaryElement) {
+            const masonaryDiv = masonaryElement as HTMLDivElement;
+            const scrollbarWidth = masonaryDiv.offsetWidth - masonaryDiv.clientWidth;
+            masonaryDiv.style.width = `calc(${masonaryDiv.style.width} + ${scrollbarWidth}px)`;
+        }
+    }, [])
+
     return (
-        <AutoSizer>
-            {({ height, width }) => (
-                <Masonry
-                    cellCount={itemsWithSizes.length}
-                    cellMeasurerCache={cache}
-                    cellPositioner={cellPositioner}
-                    // cellPositioner={createMasonryCellPositioner({
-                    //     cellMeasurerCache: cache,
-                    //     columnCount: Math.floor(width / GIF_FIXED_SMALL_WIDTH),
-                    //     columnWidth: GIF_FIXED_SMALL_WIDTH,
-                    //     spacer: 10,
-                    // })}
-                    cellRenderer={cellRenderer}
-                    height={height}
-                    width={width}
-
-                />
-            )}
-        </AutoSizer>
+        <Masonry
+            cellCount={giphyArray.length}
+            cellMeasurerCache={cache}
+            cellPositioner={cellPositioner}
+            cellRenderer={cellRenderer}
+            height={containerDimensions.height}
+            width={columnCount * GIF_FIXED_SMALL_WIDTH + ((columnCount - 1) * spacer)}
+            ref={masonaryRef}
+            className='giphys-masonry'
+        />
     )
 }
 
-type GiphyData = Partial<Pick<GiphyObject, 'id' | 'url' | 'images' | 'bitly_gif_url' | 'bitly_url' | 'alt_text' | 'title'>>;
+type GiphyProps = Partial<Pick<GiphyObject, 'id' | 'url' | 'images' | 'bitly_gif_url' | 'bitly_url' | 'alt_text' | 'title'>>;
 
-interface GiphyProps {
-    index: number;
-    data: GiphyData;
-    width: number;
-}
-// eslint-disable-next-line
-const Gif = ({ index, width, data: { id, url, images, bitly_gif_url, bitly_url, title, alt_text: altText } }: GiphyProps) => {
-    return (
-        <div className="giphy" key={`${index}-${id}`}>
-            <a href={url}>
-                {/* <figure> */}
-                {/* // eslint-disable-next-line */}
-                <img src={images.fixed_width.url} alt={altText} />
-                {/* <figcaption>{title || '-'}</figcaption> */}
-                {/* </figure> */}
-            </a>
-        </div>
-    )
+
+function Giphy(item: GiphyProps) {
+    return <a href={item.url}>
+        <img
+            src={item.images.fixed_width.url}
+            alt={item.alt_text}
+            style={{
+                height: Number(item.images.fixed_width.height),
+                width: Number(item.images.fixed_width.width),
+            }}
+            loading="lazy" />
+    </a>;
 }
