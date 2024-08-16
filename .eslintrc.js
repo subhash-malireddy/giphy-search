@@ -44,6 +44,7 @@ module.exports = {
         prop: 'ignore',
       },
     ],
+    'no-unused-vars': 2
   },
   reportUnusedDisableDirectives: true,
 };
