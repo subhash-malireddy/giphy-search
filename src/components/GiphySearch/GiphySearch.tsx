@@ -4,19 +4,19 @@ import GiphysMasonary from './GiphysMasonary';
 const GiphySearch = () => {
 
     const [queryString, setQueryString] = useState('');
-    const [shouldSearch, setshouldSearch] = useState(false);
+    // const [shouldSearch, setshouldSearch] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const triggerSearch: MouseEventHandler<HTMLButtonElement> = (e) => {
         e.stopPropagation();
 
         setQueryString(inputRef.current.value);
-        setshouldSearch(true);
+        // setshouldSearch(true);
     }
 
-    const resetShouldSearch = () => {
-        setshouldSearch(false);
-    }
+    // const resetShouldSearch = () => {
+    //     setshouldSearch(false);
+    // }
 
 
     return (
@@ -25,7 +25,8 @@ const GiphySearch = () => {
                 <input type="text" className="search-input" placeholder='Find the perfect GIF to express your mood!' ref={inputRef} />
                 <button onClick={triggerSearch}>Search</button>
             </div>
-            <GiphysMasonary queryString={queryString} shouldSearch={shouldSearch} resetShouldSearch={resetShouldSearch} />
+            {/* <GiphysMasonary queryString={queryString} shouldSearch={shouldSearch} resetShouldSearch={resetShouldSearch} /> */}
+            <GiphysMasonary queryString={queryString} />
         </div>
     )
 }

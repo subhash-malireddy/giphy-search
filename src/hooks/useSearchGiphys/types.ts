@@ -64,7 +64,7 @@ interface Meta {
     response_id: string
 }
 
-interface Pagination {
+export interface Pagination {
     total_count: number
     count: number
     offset: number

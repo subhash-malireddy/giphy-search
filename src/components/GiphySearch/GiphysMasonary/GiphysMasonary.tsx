@@ -1,4 +1,4 @@
-import { GiphyObject } from "../../../hooks/useSearchGiphys/types";
+import { GiphyObject, Pagination } from "../../../hooks/useSearchGiphys/types";
 import useSearchForGifs from "../../../hooks/useSearchGiphys";
 import "./GiphysMasonary.css";
 import {
@@ -13,17 +13,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 interface GiphysMasonryProps {
     queryString: string,
-    shouldSearch: boolean,
-    resetShouldSearch: () => void;
+    // shouldSearch: boolean,
+    // resetShouldSearch: () => void;
 }
 
 const GIF_FIXED_SMALL_WIDTH = 200;
 
-const GiphysMasonry = ({ queryString, shouldSearch, resetShouldSearch }: GiphysMasonryProps) => {
+const GiphysMasonry = ({ queryString }: GiphysMasonryProps) => {
 
     const [containerDimensions, setContainerDimensions] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
     const masonaryContainerRef = useRef<HTMLDivElement>(null);
-    const { response, loading, error } = useSearchForGifs({ queryString, shouldSearch, resetShouldSearch });
+    const { giphySearchResponse, error, fetchMore } = useSearchForGifs({ queryString });
 
 
     useEffect(() => {
@@ -38,14 +38,14 @@ const GiphysMasonry = ({ queryString, shouldSearch, resetShouldSearch }: GiphysM
         updateContainerDimensions();
     }, [containerDimensions])
 
-    if (error) return <>{`error: ${error.message}`}</>
-    if (loading) return <>loading...</>
+    if (error) return <>{`error:: ${error}`}</>
+    // if (loading) return <>loading...</>
 
     return (
         <div className="giphys-masonary-container" ref={masonaryContainerRef}>
             {
-                response && response.data && (
-                    <MasonryComponent giphyArray={response.data} containerDimensions={containerDimensions} />
+                giphySearchResponse && giphySearchResponse.data && (
+                    <MasonryComponent giphyArray={giphySearchResponse.data} containerDimensions={containerDimensions} searchResponsePagination={giphySearchResponse.pagination} fetchMore={fetchMore} queryString={queryString}/>
                 )
             }
         </div>
@@ -61,26 +61,32 @@ const cache = new CellMeasurerCache({
     fixedWidth: true,
 });
 
-const MasonryComponent = ({ giphyArray, containerDimensions }: {
+const MasonryComponent = ({ giphyArray, containerDimensions, fetchMore,  }: {
     giphyArray: Partial<GiphyObject>[],
     containerDimensions: {
         width: number;
         height: number;
-    }
+    },
+    searchResponsePagination: Partial<Pagination>,
+    fetchMore: () => void,
+    queryString: string;
 }) => {
+    console.log("🚀 ~ giphyArray:", giphyArray)
+    console.log("🚀 ~ containerDimensions:", containerDimensions)
     const masonaryRef = useRef(null);
 
     const cellRenderer: MasonryProps['cellRenderer'] = useCallback(function ({ index, parent, style }) {
         const item = giphyArray[index];
+        console.log("🚀 ~ Giphy ~ item:", item)
 
         return (
             <CellMeasurer cache={cache} index={index} parent={parent} key={item.id}>
                 <div style={style} className="giphy-wrapper">
-                    {Giphy(item)}
+                    <Giphy item={item} />
                 </div>
             </CellMeasurer>
         );
-    }, [])
+    }, [giphyArray])
 
     const columnCount = Math.floor(containerDimensions.width / GIF_FIXED_SMALL_WIDTH) - 1;
     const spacer = 10;
@@ -108,6 +114,7 @@ const MasonryComponent = ({ giphyArray, containerDimensions }: {
     }, [])
 
     return (
+        <>
         <Masonry
             cellCount={giphyArray.length}
             cellMeasurerCache={cache}
@@ -119,13 +126,15 @@ const MasonryComponent = ({ giphyArray, containerDimensions }: {
             className='giphys-masonry'
             autoHeight={false}
         />
+        <button onClick={fetchMore}>LoadMore...</button>
+        </>
     )
 }
 
 type GiphyProps = Partial<Pick<GiphyObject, 'id' | 'url' | 'images' | 'bitly_gif_url' | 'bitly_url' | 'alt_text' | 'title'>>;
 
 
-function Giphy(item: GiphyProps) {
+function Giphy({item}:{item: GiphyProps}) {
     return <a href={item.url}>
         <img
             src={item.images.fixed_width.url}
