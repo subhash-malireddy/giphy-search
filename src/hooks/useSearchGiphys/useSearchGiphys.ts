@@ -15,8 +15,8 @@ const useSearchForGifs = ({ queryString = '', shouldSearch = false, resetShouldS
     const [error, setError] = useState<Error>(null);
 
     useEffect(() => {
-        if (!queryString || !shouldSearch) return;
         const searchGiphys = async () => {
+            if (!queryString || !shouldSearch) return;
             const searchParams = new URLSearchParams();
             searchParams.append('api_key', process.env.REACT_APP_giphy_api_key)
             searchParams.append('q', queryString);

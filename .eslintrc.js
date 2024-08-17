@@ -44,6 +44,7 @@ module.exports = {
         prop: 'ignore',
       },
     ],
+    'react-hooks/exhaustive-deps': 'warn',
     'no-unused-vars': 2
   },
   reportUnusedDisableDirectives: true,

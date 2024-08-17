@@ -70,7 +70,7 @@ const MasonryComponent = ({ giphyArray, containerDimensions }: {
 }) => {
     const masonaryRef = useRef(null);
 
-    const cellRenderer: MasonryProps['cellRenderer'] = useCallback(function ({ index, key, parent, style }) {
+    const cellRenderer: MasonryProps['cellRenderer'] = useCallback(function ({ index, parent, style }) {
         const item = giphyArray[index];
 
         return (
@@ -134,6 +134,7 @@ function Giphy(item: GiphyProps) {
                 height: Number(item.images.fixed_width.height),
                 width: Number(item.images.fixed_width.width),
             }}
-            loading="lazy" />
+            loading="lazy"
+        />
     </a>;
 }
