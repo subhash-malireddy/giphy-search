@@ -44,6 +44,8 @@ module.exports = {
         prop: 'ignore',
       },
     ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   reportUnusedDisableDirectives: true,
 };
