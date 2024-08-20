@@ -19,7 +19,7 @@ const GifsGrid = ({ queryString, shouldSearch, resetShouldSearch }: GifsGridProp
 
     const { response, loading, error } = useSearchForGifs({ queryString, shouldSearch, resetShouldSearch });
     const containerRef = useRef<HTMLDivElement>(null);
-    const [shouldComputePadding, setShouldComputePadding] = useState(false);
+    const [shouldReComputePadding, setShouldReComputePadding] = useState(false);
     
     useEffect(() => {
         
@@ -27,28 +27,31 @@ const GifsGrid = ({ queryString, shouldSearch, resetShouldSearch }: GifsGridProp
 
         const containerDiv = containerRef.current;
         const { columnCount, columnGap, columnWidth } = caclulateColumnProperties(containerDiv);
-
+        
         containerDiv.style.columnCount = `${columnCount}`;
         containerDiv.style.columnWidth = `${columnWidth}px`;
         containerDiv.style.columnGap = `${columnGap}px`;
         
+        const  containerPadding = getContainerPadding({ columnCount, columnGap, containerDiv, includeScrollBarWidthBuffer: true });
+        containerDiv.style.padding = containerPadding;
+        
         if(response){
-            setShouldComputePadding(true);
+            setShouldReComputePadding(true);
         }
 
     },[response])
 
     useEffect(() => {
 
-        if(containerRef.current === null || !shouldComputePadding) return;
+        if(containerRef.current === null || !shouldReComputePadding) return;
         
         const containerDiv = containerRef.current;
         const { columnCount, columnGap, columnWidth } = caclulateColumnProperties(containerDiv);
-        const  containerPadding = calculateContainerPadding({ columnCount, columnGap, containerDiv });
+        const  containerPadding = getContainerPadding({ columnCount, columnGap, containerDiv });
         containerDiv.style.padding = containerPadding;
 
-        setShouldComputePadding(false)
-    })
+        setShouldReComputePadding(false)
+    },[shouldReComputePadding])
     
     if (error) return <>`error: ${error.message}`</> 
 
@@ -91,14 +94,17 @@ const Gif = ({ id, url, images, bitly_gif_url, bitly_url, title, alt_text: altTe
         </div>
     )
 }
-function calculateContainerPadding({ columnCount, columnGap, containerDiv }: { columnCount: number; columnGap: number; containerDiv: HTMLDivElement; }) {
+function getContainerPadding({ columnCount, columnGap, containerDiv, includeScrollBarWidthBuffer = false }: { columnCount: number; columnGap: number; containerDiv: HTMLDivElement; includeScrollBarWidthBuffer?: boolean}) {
     
     if(columnCount === 0) return '0';
     
     const containerWidth = containerDiv.offsetWidth;
     const totalColumnGap = (columnCount - 1) * columnGap;
     const totalColumnsWidth = columnCount * GIF_FIXED_SMALL_WIDTH;
-    const totalHorizontalPadding = containerWidth - totalColumnsWidth - totalColumnGap;
+    const possibleHorizontalPadding = containerWidth - totalColumnsWidth - totalColumnGap;
+    const WINDOW_SCROLLBAR_WIDTH_BUFFER = 20;
+
+    const totalHorizontalPadding = includeScrollBarWidthBuffer ? possibleHorizontalPadding - WINDOW_SCROLLBAR_WIDTH_BUFFER : possibleHorizontalPadding;
     const containerPadding = Math.sign(totalHorizontalPadding) === 1 ? `0 ${totalHorizontalPadding / 2}px` : '0';
 
     return containerPadding;
