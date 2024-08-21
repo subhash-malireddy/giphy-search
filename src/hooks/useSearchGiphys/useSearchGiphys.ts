@@ -14,9 +14,11 @@ const useSearchForGifs = ({
   shouldSearch = false,
   resetShouldSearch,
 }: UseSearchForGifsArgs) => {
-  const [response, setResponse] = useState<Maybe<GiphySearchResponse>>(null);
+  const [response, setResponse] = useState<Maybe<GiphySearchResponse>>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error>(null);
+  const [error, setError] = useState<Error | undefined>(undefined);
+
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     if (!queryString || !shouldSearch) return;
@@ -24,13 +26,22 @@ const useSearchForGifs = ({
       const searchParams = new URLSearchParams();
       searchParams.append("api_key", process.env.REACT_APP_giphy_api_key);
       searchParams.append("q", queryString);
+      searchParams.append("offset", offset.toString());
 
       try {
         setLoading(true);
-        const response = await axiosInstance.get("", {
+        const { data } = await axiosInstance.get("", {
           params: searchParams,
         });
-        setResponse(response.data);
+        if (offset === 0) {
+          setResponse(data);
+        } else {
+          setResponse((prev) => ({
+            data: [...(prev?.data || []), ...data.data],
+            meta: data.meta,
+            pagination: data.pagination,
+          }));
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -42,9 +53,23 @@ const useSearchForGifs = ({
     };
 
     searchGiphys();
-  }, [queryString, shouldSearch]);
+  }, [queryString, shouldSearch, offset, resetShouldSearch]);
 
-  return { response, loading, error };
+  useEffect(
+    function resetAllState() {
+      setResponse(null);
+      setLoading(false);
+      setError(undefined);
+      setOffset(0);
+    },
+    [queryString],
+  );
+
+  const loadMore = () => {
+    setOffset(offset + 20);
+  };
+
+  return { response, loading, error, loadMore } as const;
 };
 
 export default useSearchForGifs;
