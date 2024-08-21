@@ -1,1 +1,1 @@
-export { default } from './useSearchGiphys';
+export { default } from "./useSearchGiphys";

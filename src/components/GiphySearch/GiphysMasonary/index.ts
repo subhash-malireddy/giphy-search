@@ -1,1 +1,1 @@
-export { default } from './GiphysMasonary'
+export { default } from "./GiphysMasonary";

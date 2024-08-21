@@ -1,0 +1,9 @@
+dist
+build
+coverage
+bitbucket-pipelines.yml
+serverless.yml
+.serverless
+__mocks__
+.github
+deploy.yml
