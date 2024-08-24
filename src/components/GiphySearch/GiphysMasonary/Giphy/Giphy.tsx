@@ -14,39 +14,38 @@ type GiphyData = Partial<
   >
 >;
 
-const Giphy = React.forwardRef(function Giphy(
-  {
-    id,
-    url,
-    images,
-    // eslint-disable-next-line
-    bitly_gif_url,
-    // eslint-disable-next-line
-    bitly_url,
-    title,
-    alt_text: altText,
-    index,
-  }: GiphyData & { index: number },
-  ref: (instance: Element) => void,
-) {
-  console.log("🚀 ~ index:", index);
-  console.log("🚀 ~ ref:", ref);
+interface GiphyProps extends GiphyData {
+  callbackRef?: React.RefCallback<HTMLDivElement> | null;
+}
+
+const Giphy = ({
+  id,
+  url,
+  images,
+  // eslint-disable-next-line
+  bitly_gif_url,
+  // eslint-disable-next-line
+  bitly_url,
+  title,
+  alt_text: altText,
+  callbackRef,
+}: GiphyProps) => {
   return (
     <div
       className="giphy"
       key={id}
       style={{
-        height: Number(images.fixed_width.height),
-        width: Number(images.fixed_width.width),
+        height: Number(images?.fixed_width.height),
+        width: Number(images?.fixed_width.width),
         backgroundColor: "rebeccapurple",
       }}
-      ref={ref}
+      ref={callbackRef}
     >
       <a href={url}>
-        <img src={images.fixed_width.url} alt={altText} loading="lazy" />
+        <img src={images?.fixed_width.url} alt={altText} loading="lazy" />
       </a>
     </div>
   );
-});
+};
 
 export default Giphy;

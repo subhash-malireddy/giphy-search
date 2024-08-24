@@ -7,7 +7,7 @@ const useIntersectionObserver = <T extends Element>({
   callback: IntersectionObserverCallback;
   options?: IntersectionObserverInit;
 }) => {
-  const observer = useRef<IntersectionObserver>(null);
+  const observer = useRef<IntersectionObserver>();
   const lastGiphyElementRef: React.RefCallback<T> = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect();

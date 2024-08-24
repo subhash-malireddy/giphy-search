@@ -26,8 +26,12 @@ const GifsGrid = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const hasGiphyData = Boolean(response && response.data.length);
 
-  const hasMoreGiphysToLoad =
-    hasGiphyData && response.data.length < response.pagination.total_count;
+  const hasMoreGiphysToLoad = Boolean(
+    response &&
+      response.data.length &&
+      response?.pagination.total_count &&
+      response?.data.length < response?.pagination.total_count,
+  );
 
   const fetchMoreGiphsOnIntersection: IntersectionObserverCallback =
     useCallback(
@@ -79,14 +83,13 @@ const GifsGrid = ({
       <div ref={containerRef} className="giphys-masonry-container">
         {hasGiphyData && (
           <>
-            {response.data.map((giphy, index, thisArray) => {
+            {response?.data.map((giphy, index, thisArray) => {
               const isLastItem = index === thisArray.length - 1;
               return (
                 <Giphy
                   {...giphy}
                   key={giphy.id}
-                  index={index}
-                  ref={isLastItem ? lastGiphyElementRef : null}
+                  callbackRef={isLastItem ? lastGiphyElementRef : null}
                 />
               );
             })}

@@ -1,4 +1,5 @@
 export interface GiphySearchResponse {
+  //* Not really confident about the attributes hence using Partial utility type
   data: Partial<GiphyObject>[];
   meta: Partial<Meta>;
   pagination: Partial<Pagination>;

@@ -17,7 +17,7 @@ const useSearchForGifs = ({
 }: UseSearchForGifsArgs) => {
   const [response, setResponse] = useState<Maybe<GiphySearchResponse>>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | undefined>(undefined);
+  const [error, setError] = useState<Maybe<Error>>(undefined);
 
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -29,8 +29,10 @@ const useSearchForGifs = ({
     function fetchData() {
       if (!queryString || !shouldSearch || loading) return;
       const getGiphs = async () => {
+        const apiKey = process.env.REACT_APP_giphy_api_key;
+        if (!apiKey) return;
         const searchParams = new URLSearchParams();
-        searchParams.append("api_key", process.env.REACT_APP_giphy_api_key);
+        searchParams.append("api_key", apiKey);
         searchParams.append("q", queryString);
         searchParams.append("offset", offset.toString());
 
@@ -50,7 +52,8 @@ const useSearchForGifs = ({
             }));
           }
         } catch (err) {
-          setError(err.message);
+          //@ts-ignore
+          setError(Error(err));
         } finally {
           setLoading(false);
           if (resetShouldSearch) {
