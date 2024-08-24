@@ -1,10 +1,9 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import "./GiphySearch.css";
 import GiphysMasonary from "./GiphysMasonary";
 const GiphySearch = () => {
   const [queryString, setQueryString] = useState("");
   const [shouldSearch, setshouldSearch] = useState(false);
-  const gifsGridContainer = useRef<HTMLDivElement>(null);
 
   const handleSearchQueryChange: React.ChangeEventHandler<HTMLInputElement> = (
     e,
@@ -18,9 +17,13 @@ const GiphySearch = () => {
     setshouldSearch(true);
   };
 
-  const resetShouldSearch = () => {
+  const resetShouldSearch = useCallback(() => {
     setshouldSearch(false);
-  };
+  }, []);
+
+  const allowSearch = useCallback(() => {
+    setshouldSearch(true);
+  }, []);
 
   return (
     <div className="wrapper">
@@ -38,14 +41,10 @@ const GiphySearch = () => {
         queryString={queryString}
         shouldSearch={shouldSearch}
         resetShouldSearch={resetShouldSearch}
+        allowSearch={allowSearch}
       />
     </div>
   );
 };
 
 export default GiphySearch;
-
-/**
- * 1. the most important thing is to decide how many columns you want to display on the screen based on the screen size.
- * 2. Remember the image width is 200px
- */

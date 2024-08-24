@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import { GiphySearchResponse } from "./types";
 import { Maybe } from "../../utility/utilityTypes";
@@ -9,65 +9,75 @@ interface UseSearchForGifsArgs {
   resetShouldSearch?: () => void;
 }
 
+const DEFAULT_SERVER_RETURN_GIPHS_COUNT = 50;
 const useSearchForGifs = ({
   queryString = "",
   shouldSearch = false,
   resetShouldSearch,
 }: UseSearchForGifsArgs) => {
-  const [response, setResponse] = useState<Maybe<GiphySearchResponse>>();
+  const [response, setResponse] = useState<Maybe<GiphySearchResponse>>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | undefined>(undefined);
 
-  const [offset, setOffset] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
-  useEffect(() => {
-    if (!queryString || !shouldSearch) return;
-    const searchGiphys = async () => {
-      const searchParams = new URLSearchParams();
-      searchParams.append("api_key", process.env.REACT_APP_giphy_api_key);
-      searchParams.append("q", queryString);
-      searchParams.append("offset", offset.toString());
+  const offset = pageNumber * DEFAULT_SERVER_RETURN_GIPHS_COUNT;
 
-      try {
-        setLoading(true);
-        const { data } = await axiosInstance.get("", {
-          params: searchParams,
-        });
-        if (offset === 0) {
-          setResponse(data);
-        } else {
-          setResponse((prev) => ({
-            data: [...(prev?.data || []), ...data.data],
-            meta: data.meta,
-            pagination: data.pagination,
-          }));
+  const prevQueryString = useRef(queryString);
+
+  useEffect(
+    function fetchData() {
+      if (!queryString || !shouldSearch || loading) return;
+      const getGiphs = async () => {
+        const searchParams = new URLSearchParams();
+        searchParams.append("api_key", process.env.REACT_APP_giphy_api_key);
+        searchParams.append("q", queryString);
+        searchParams.append("offset", offset.toString());
+
+        try {
+          setLoading(true);
+          const { data } = await axiosInstance.get("", {
+            params: searchParams,
+          });
+          prevQueryString.current = queryString;
+          if (offset === 0) {
+            setResponse(data);
+          } else {
+            setResponse((prev) => ({
+              data: [...(prev?.data || []), ...data.data],
+              meta: data.meta,
+              pagination: data.pagination,
+            }));
+          }
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+          if (resetShouldSearch) {
+            resetShouldSearch();
+          }
         }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-        if (resetShouldSearch) {
-          resetShouldSearch();
-        }
-      }
-    };
+      };
 
-    searchGiphys();
-  }, [queryString, shouldSearch, offset, resetShouldSearch]);
+      getGiphs();
+    },
+    [queryString, offset, loading, shouldSearch, resetShouldSearch],
+  );
 
   useEffect(
     function resetAllState() {
+      if (prevQueryString.current === queryString) return;
       setResponse(null);
       setLoading(false);
       setError(undefined);
-      setOffset(0);
+      setPageNumber(0);
     },
     [queryString],
   );
 
-  const loadMore = () => {
-    setOffset(offset + 20);
-  };
+  const loadMore = useCallback(() => {
+    setPageNumber((pageNumber) => pageNumber + 1);
+  }, []);
 
   return { response, loading, error, loadMore } as const;
 };
