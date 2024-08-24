@@ -3,6 +3,7 @@ import "./GiphysMasonary.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Giphy from "./Giphy";
 import { caclulateColumnProperties, getContainerPadding } from "./Giphy/utils";
+import useIntersectionObserver from "../../../hooks/useSearchGiphys/useIntersectionObserver";
 
 interface GifsGridProps {
   queryString: string;
@@ -28,23 +29,26 @@ const GifsGrid = ({
   const hasMoreGiphysToLoad =
     hasGiphyData && response.data.length < response.pagination.total_count;
 
-  const observer = useRef<IntersectionObserver>(null);
-  const lastGiphyElementRef: React.RefCallback<HTMLDivElement> = useCallback(
-    (node) => {
-      if (loading) return;
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (!!entries[0] && entries[0].isIntersecting && hasMoreGiphysToLoad) {
+  const fetchMoreGiphsOnIntersection: IntersectionObserverCallback =
+    useCallback(
+      (entries) => {
+        if (
+          !!entries[0] &&
+          entries[0].isIntersecting &&
+          hasMoreGiphysToLoad &&
+          !loading
+        ) {
           allowSearch();
           loadMore();
         }
-      });
+      },
+      [hasMoreGiphysToLoad, loading, loadMore, allowSearch],
+    );
 
-      if (node) observer.current.observe(node);
-    },
-    [loadMore, allowSearch, hasMoreGiphysToLoad, loading],
-  );
+  const lastGiphyElementRef = useIntersectionObserver<HTMLDivElement>({
+    callback: fetchMoreGiphsOnIntersection,
+  });
+
   useEffect(function setInitialContainerStyling() {
     if (containerRef.current === null) return;
 
