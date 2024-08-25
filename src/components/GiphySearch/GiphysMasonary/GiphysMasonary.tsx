@@ -94,6 +94,7 @@ const GifsGrid = ({
                   {...giphy}
                   key={giphy.id}
                   callbackRef={isLastItem ? lastGiphyElementRef : null}
+                  connectionType={networkSpeed.effectiveType}
                 />
               );
             })}

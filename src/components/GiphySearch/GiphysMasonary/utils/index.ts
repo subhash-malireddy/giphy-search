@@ -1,4 +1,4 @@
-export const GIF_FIXED_SMALL_WIDTH = 200;
+export const GIF_FIXED_WIDTH = 200;
 
 export const DEFAULT_COLUMN_COUNT = 1;
 
@@ -17,7 +17,7 @@ export function getContainerPadding({
 
   const containerWidth = containerDiv.offsetWidth;
   const totalColumnGap = (columnCount - 1) * columnGap;
-  const totalColumnsWidth = columnCount * GIF_FIXED_SMALL_WIDTH;
+  const totalColumnsWidth = columnCount * GIF_FIXED_WIDTH;
   const possibleHorizontalPadding =
     containerWidth - totalColumnsWidth - totalColumnGap;
   const WINDOW_SCROLLBAR_WIDTH_BUFFER = 20;
@@ -34,10 +34,10 @@ export function getContainerPadding({
 }
 export function caclulateColumnProperties(containerDiv?: HTMLDivElement) {
   if (!containerDiv)
-    return { columnCount: 0, columnGap: 0, columnWidth: GIF_FIXED_SMALL_WIDTH };
+    return { columnCount: 0, columnGap: 0, columnWidth: GIF_FIXED_WIDTH };
 
   const width = containerDiv.offsetWidth;
-  const columnsCountDecimal = width / GIF_FIXED_SMALL_WIDTH - 1;
+  const columnsCountDecimal = width / GIF_FIXED_WIDTH - 1;
   const columnCount =
     Math.sign(columnsCountDecimal) === 1
       ? Math.floor(columnsCountDecimal)
@@ -47,6 +47,6 @@ export function caclulateColumnProperties(containerDiv?: HTMLDivElement) {
   return {
     columnCount,
     columnGap: COLUMN_GAP,
-    columnWidth: GIF_FIXED_SMALL_WIDTH,
+    columnWidth: GIF_FIXED_WIDTH,
   };
 }

@@ -44,10 +44,10 @@ interface Images {
   // fixed_height_small_still: FixedHeightSmallStill
   // fixed_height_still: FixedHeightStill
   fixed_width: FixedWidth;
-  // fixed_width_downsampled: FixedWidthDownsampled
-  // fixed_width_small: FixedWidthSmall
+  fixed_width_downsampled: FixedWidthDownsampled;
+  // fixed_width_small: FixedWidthSmall;
   // fixed_width_small_still: FixedWidthSmallStill
-  // fixed_width_still: FixedWidthStill
+  fixed_width_still: FixedWidthStill;
   // looping: Looping
   // original_still: OriginalStill
   // original_mp4: OriginalMp4
@@ -71,7 +71,7 @@ interface Pagination {
   offset: number;
 }
 
-interface FixedWidth {
+interface BaseFixedWidth {
   height: string;
   width: string;
   size: string;
@@ -80,4 +80,14 @@ interface FixedWidth {
   mp4: string;
   webp_size: string;
   webp: string;
+}
+interface FixedWidth extends BaseFixedWidth {}
+
+interface FixedWidthDownsampled extends BaseFixedWidth {}
+
+interface FixedWidthStill {
+  height: string;
+  width: string;
+  size: string;
+  url: string;
 }

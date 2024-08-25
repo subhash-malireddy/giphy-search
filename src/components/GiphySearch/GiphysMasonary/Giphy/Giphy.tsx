@@ -1,5 +1,6 @@
 import React from "react";
 import { GiphyObject } from "../../../../hooks/useSearchGiphys/types";
+import { getGiphyImgAttributes, getImageForConnectionType } from "./utils";
 
 type GiphyData = Partial<
   Pick<
@@ -16,6 +17,7 @@ type GiphyData = Partial<
 
 interface GiphyProps extends GiphyData {
   callbackRef?: React.RefCallback<HTMLDivElement> | null;
+  connectionType: NetworkInformation["effectiveType"];
 }
 
 const Giphy = ({
@@ -29,20 +31,24 @@ const Giphy = ({
   title,
   alt_text: altText,
   callbackRef,
+  connectionType,
 }: GiphyProps) => {
+  if (!images) return null;
+  const imgData = getImageForConnectionType({ connectionType, images });
+  const { src, scrSet } = getGiphyImgAttributes({ imgData });
   return (
     <div
       className="giphy"
       key={id}
       style={{
-        height: Number(images?.fixed_width.height),
-        width: Number(images?.fixed_width.width),
+        height: Number(imgData.height),
+        width: Number(imgData.width),
         backgroundColor: "rebeccapurple",
       }}
       ref={callbackRef}
     >
       <a href={url}>
-        <img src={images?.fixed_width.url} alt={altText} loading="lazy" />
+        <img srcSet={scrSet} src={src} alt={altText} loading="lazy" />
       </a>
     </div>
   );
