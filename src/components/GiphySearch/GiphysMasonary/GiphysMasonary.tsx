@@ -2,8 +2,9 @@ import useSearchForGifs from "../../../hooks/useSearchGiphys";
 import "./GiphysMasonary.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Giphy from "./Giphy";
-import { caclulateColumnProperties, getContainerPadding } from "./Giphy/utils";
+import { caclulateColumnProperties, getContainerPadding } from "./utils";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
+import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
 
 interface GifsGridProps {
   queryString: string;
@@ -52,6 +53,9 @@ const GifsGrid = ({
   const lastGiphyElementRef = useIntersectionObserver<HTMLDivElement>({
     callback: fetchMoreGiphsOnIntersection,
   });
+
+  const networkSpeed = useNetworkSpeed();
+  console.log("🚀 ~ networkSpeed:", networkSpeed);
 
   useEffect(function setInitialContainerStyling() {
     if (containerRef.current === null) return;
