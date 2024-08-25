@@ -3,7 +3,7 @@ import "./GiphysMasonary.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Giphy from "./Giphy";
 import { caclulateColumnProperties, getContainerPadding } from "./Giphy/utils";
-import useIntersectionObserver from "../../../hooks/useSearchGiphys/useIntersectionObserver";
+import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 
 interface GifsGridProps {
   queryString: string;
