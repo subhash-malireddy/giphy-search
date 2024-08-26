@@ -35,7 +35,7 @@ const Giphy = ({
 }: GiphyProps) => {
   if (!images) return null;
   const imgData = getImageForConnectionType({ connectionType, images });
-  const { src, scrSet } = getGiphyImgAttributes({ imgData });
+  const { src, srcSet } = getGiphyImgAttributes({ imgData });
   return (
     <div
       className="giphy"
@@ -48,7 +48,7 @@ const Giphy = ({
       ref={callbackRef}
     >
       <a href={url}>
-        <img srcSet={scrSet} src={src} alt={altText} loading="lazy" />
+        <img srcSet={srcSet} src={src} alt={altText} loading="lazy" />
       </a>
     </div>
   );

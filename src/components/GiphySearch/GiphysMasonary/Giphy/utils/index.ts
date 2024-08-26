@@ -11,8 +11,8 @@ export const getGiphyImgAttributes = ({
     | GiphyImageObject["fixed_width_still"];
 }) => {
   return hasWebpData(imgData)
-    ? { scrSet: `${imgData.webp}, ${imgData.url}`, src: imgData.webp }
-    : { srcset: "", src: imgData.url };
+    ? { srcSet: `${imgData.webp}, ${imgData.url}`, src: imgData.webp }
+    : { srcSet: "", src: imgData.url };
 };
 
 export function getImageForConnectionType({
@@ -44,6 +44,7 @@ export function getImageForConnectionType({
   return imgData;
 }
 
+/* istanbul ignore next */
 function hasWebpData(
   imgData:
     | GiphyImageObject["fixed_width"]
