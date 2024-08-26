@@ -19,7 +19,7 @@ export function getImageForConnectionType({
   connectionType,
   images,
 }: {
-  connectionType: string;
+  connectionType: NetworkInformation["effectiveType"];
   images: GiphyImageObject;
 }) {
   let imgData:
