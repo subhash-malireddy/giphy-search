@@ -43,7 +43,8 @@
     "info:prod": "npx serverless info --verbose --stage prod --region ap-southeast-2 --aws-profile giphy-search",
     "rename": "./scripts/rename.sh",
     "aws:profile": "./scripts/setup-aws-profile.sh giphy-search",
-    "lint": "npx eslint --ext .tsx,.ts src/"
+    "lint": "npx eslint --ext .tsx,.ts src/",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^1.7.3",
@@ -69,6 +70,7 @@
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prettier": "2.8.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
