@@ -6,19 +6,19 @@ import { caclulateColumnProperties, getContainerPadding } from "./utils";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
 
-interface GifsGridProps {
+interface GiphyMasonryProps {
   queryString: string;
   shouldSearch: boolean;
   resetShouldSearch: () => void;
   allowSearch: () => void;
 }
 
-const GifsGrid = ({
+const GiphyMasonry = ({
   queryString,
   shouldSearch,
   resetShouldSearch,
   allowSearch,
-}: GifsGridProps) => {
+}: GiphyMasonryProps) => {
   const { response, loading, error, loadMore } = useSearchForGifs({
     queryString,
     shouldSearch,
@@ -113,4 +113,4 @@ const GifsGrid = ({
     </>
   );
 };
-export default GifsGrid;
+export default GiphyMasonry;

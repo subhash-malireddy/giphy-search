@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import "./GiphySearch.css";
-import GiphysMasonary from "./GiphysMasonary";
+import GiphysMasonry from "./GiphysMasonry";
 const GiphySearch = () => {
   const [queryString, setQueryString] = useState("");
   const [shouldSearch, setshouldSearch] = useState(false);
@@ -37,7 +37,7 @@ const GiphySearch = () => {
         />
         <button>Search</button>
       </form>
-      <GiphysMasonary
+      <GiphysMasonry
         queryString={queryString}
         shouldSearch={shouldSearch}
         resetShouldSearch={resetShouldSearch}

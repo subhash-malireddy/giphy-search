@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import GiphyMasonry from "./GiphysMasonary";
+import GiphyMasonry from "./GiphyMasonry";
 import useSearchForGifs from "../../../hooks/useSearchGiphys";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
