@@ -43,11 +43,11 @@ interface Images {
   // fixed_height_small: FixedHeightSmall
   // fixed_height_small_still: FixedHeightSmallStill
   // fixed_height_still: FixedHeightStill
-  fixed_width: FixedWidth;
-  fixed_width_downsampled: FixedWidthDownsampled;
+  fixed_width: Partial<FixedWidth>;
+  fixed_width_downsampled: Partial<FixedWidthDownsampled>;
   // fixed_width_small: FixedWidthSmall;
   // fixed_width_small_still: FixedWidthSmallStill
-  fixed_width_still: FixedWidthStill;
+  fixed_width_still: Partial<FixedWidthStill>;
   // looping: Looping
   // original_still: OriginalStill
   // original_mp4: OriginalMp4
