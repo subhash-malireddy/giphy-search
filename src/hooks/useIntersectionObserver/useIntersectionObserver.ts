@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-const useIntersectionObserver = <T extends Element>({
+const useIntersectionObserver = <T extends HTMLElement>({
   callback,
   options,
 }: {
