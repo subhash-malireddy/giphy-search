@@ -1,5 +1,5 @@
 import useSearchForGifs from "../../../hooks/useSearchGiphys";
-import "./GiphysMasonary.css";
+import "./GiphyMasonry.css";
 import { useCallback, useEffect, useRef } from "react";
 import Giphy from "./Giphy";
 import { caclulateColumnProperties, getContainerPadding } from "./utils";
