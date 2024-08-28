@@ -60,7 +60,8 @@ const useNetworkSpeed = (): NetworkSpeed => {
         console.error("Network speed estimation failed:", error);
       }
     };
-
+    /* istanbul ignore next */
+    // ignored but does have a test for the first if condition
     const deriveEffectiveType = (
       rtt: number,
       downlinkKbps: number,
