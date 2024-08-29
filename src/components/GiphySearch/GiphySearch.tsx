@@ -27,15 +27,20 @@ const GiphySearch = () => {
 
   return (
     <div className="wrapper">
-      <form onSubmit={handleSubmit} className="search-form">
+      <form
+        onSubmit={handleSubmit}
+        className="search-form"
+        name="giphy-search-form"
+      >
         <input
+          name="giphy-search-input"
           type="text"
           className="search-input"
           placeholder="Find the perfect GIF to express your mood!"
           value={queryString}
           onChange={handleSearchQueryChange}
         />
-        <button>Search</button>
+        <button name="giphy-search-submit">Search</button>
       </form>
       <GiphyMasonry
         queryString={queryString}

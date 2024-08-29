@@ -48,7 +48,14 @@ const Giphy = ({
       ref={callbackRef}
     >
       <a href={url}>
-        <img srcSet={srcSet} src={src} alt={altText} loading="lazy" />
+        <img
+          srcSet={srcSet}
+          src={src}
+          alt={altText}
+          loading="lazy"
+          height={Number(imgData.height)}
+          width={Number(imgData.width)}
+        />
       </a>
     </div>
   );
