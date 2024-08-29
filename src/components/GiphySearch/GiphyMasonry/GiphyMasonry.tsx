@@ -23,6 +23,7 @@ const GiphyMasonry = ({
     queryString,
     shouldSearch,
     resetShouldSearch,
+    allowSearch,
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const hasGiphyData = response && response.data.length;
@@ -46,11 +47,10 @@ const GiphyMasonry = ({
           hasMoreGiphysToLoad &&
           !loading
         ) {
-          allowSearch();
           loadMore();
         }
       },
-      [hasMoreGiphysToLoad, loading, loadMore, allowSearch],
+      [hasMoreGiphysToLoad, loading, loadMore],
     );
 
   const lastGiphyElementRef = useIntersectionObserver<HTMLDivElement>({

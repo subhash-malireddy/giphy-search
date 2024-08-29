@@ -4,22 +4,26 @@ import { GiphySearchResponse } from "./types";
 import { Maybe } from "../../utility/utilityTypes";
 
 interface UseSearchForGifsArgs {
-  queryString?: string;
-  shouldSearch?: boolean;
-  resetShouldSearch?: () => void;
+  queryString: string;
+  shouldSearch: boolean;
+  resetShouldSearch: () => void;
+  allowSearch: () => void;
 }
 
 const DEFAULT_SERVER_RETURN_GIPHS_COUNT = 50;
+const INITIAL_PAGE = 1;
+
 const useSearchForGifs = ({
-  queryString = "",
-  shouldSearch = false,
+  queryString,
+  shouldSearch,
   resetShouldSearch,
+  allowSearch,
 }: UseSearchForGifsArgs) => {
   const [response, setResponse] = useState<Maybe<GiphySearchResponse>>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Maybe<Error>>(undefined);
+  const [error, setError] = useState<Maybe<Error>>(null);
 
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(INITIAL_PAGE);
 
   const offset = pageNumber * DEFAULT_SERVER_RETURN_GIPHS_COUNT;
 
@@ -30,6 +34,7 @@ const useSearchForGifs = ({
       if (!queryString || !shouldSearch || loading) return;
       const getGiphs = async () => {
         const apiKey = process.env.REACT_APP_giphy_api_key;
+        /* istanbul ignore next */
         if (!apiKey) return;
         const searchParams = new URLSearchParams();
         searchParams.append("api_key", apiKey);
@@ -42,18 +47,16 @@ const useSearchForGifs = ({
             params: searchParams,
           });
           prevQueryString.current = queryString;
-          if (offset === 0) {
-            setResponse(data);
-          } else {
-            setResponse((prev) => ({
-              data: [...(prev?.data || []), ...data.data],
-              meta: data.meta,
-              pagination: data.pagination,
-            }));
-          }
+
+          setResponse((prev) => ({
+            data: [...(prev?.data || []), ...data.data],
+            meta: data.meta,
+            pagination: data.pagination,
+          }));
         } catch (err) {
-          //@ts-ignore
-          setError(Error(err));
+          /* istanbul ignore next */
+          if (!!error) return;
+          setError(err as Error);
         } finally {
           setLoading(false);
           if (resetShouldSearch) {
@@ -64,7 +67,7 @@ const useSearchForGifs = ({
 
       getGiphs();
     },
-    [queryString, offset, loading, shouldSearch, resetShouldSearch],
+    [queryString, offset, error, loading, shouldSearch, resetShouldSearch],
   );
 
   useEffect(
@@ -72,15 +75,16 @@ const useSearchForGifs = ({
       if (prevQueryString.current === queryString) return;
       setResponse(null);
       setLoading(false);
-      setError(undefined);
-      setPageNumber(0);
+      setError(null);
+      setPageNumber(INITIAL_PAGE);
     },
     [queryString],
   );
 
   const loadMore = useCallback(() => {
     setPageNumber((pageNumber) => pageNumber + 1);
-  }, []);
+    allowSearch();
+  }, [allowSearch]);
 
   return { response, loading, error, loadMore } as const;
 };
