@@ -20,7 +20,11 @@
             "disableOptimisticBPs": true,
             "windows": {
                 "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-            }
+            },
+            "skipFiles": [
+                "${workspaceFolder}/node_modules/**/*",
+                "<node_internals>/**/*"
+            ]
         }
     ]
 }
