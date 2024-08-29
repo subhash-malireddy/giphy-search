@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import GiphySearch from ".";
-
+import GiphyMasonry from "./GiphyMasonry";
+jest.mock("./GiphyMasonry", () => ({
+  __esModule: true,
+  default: () => <div data-testid="giphy_search_output"></div>,
+}));
+GiphyMasonry;
 describe("Testing GiphySearch", () => {
   it("Then redners the component properly", () => {
     renderComponent();
