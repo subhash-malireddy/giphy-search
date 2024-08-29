@@ -10,8 +10,9 @@ interface UseSearchForGifsArgs {
   allowSearch: () => void;
 }
 
-const DEFAULT_SERVER_RETURN_GIPHS_COUNT = 50;
 const INITIAL_PAGE = 1;
+const INITIAL_OFFSET = 0;
+const NEXT_OFFSET = 50;
 
 const useSearchForGifs = ({
   queryString,
@@ -25,7 +26,8 @@ const useSearchForGifs = ({
 
   const [pageNumber, setPageNumber] = useState(INITIAL_PAGE);
 
-  const offset = pageNumber * DEFAULT_SERVER_RETURN_GIPHS_COUNT;
+  const offset =
+    pageNumber === 1 ? INITIAL_OFFSET : (pageNumber - 1) * NEXT_OFFSET;
 
   const prevQueryString = useRef(queryString);
 
