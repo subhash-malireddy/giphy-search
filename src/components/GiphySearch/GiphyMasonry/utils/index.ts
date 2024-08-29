@@ -5,21 +5,21 @@ export const DEFAULT_COLUMN_COUNT = 1;
 export function getContainerPadding({
   columnCount,
   columnGap,
-  containerDiv,
+  containerOffsetWidth,
   includeScrollBarWidthBuffer = false,
 }: {
   columnCount: number;
   columnGap: number;
-  containerDiv: HTMLDivElement;
+  containerOffsetWidth: number;
   includeScrollBarWidthBuffer?: boolean;
 }) {
   if (columnCount === 0) return "0";
 
-  const containerWidth = containerDiv.offsetWidth;
+  // const containerWidth = containerDiv.offsetWidth;
   const totalColumnGap = (columnCount - 1) * columnGap;
   const totalColumnsWidth = columnCount * GIF_FIXED_WIDTH;
   const possibleHorizontalPadding =
-    containerWidth - totalColumnsWidth - totalColumnGap;
+    containerOffsetWidth - totalColumnsWidth - totalColumnGap;
   const WINDOW_SCROLLBAR_WIDTH_BUFFER = 20;
 
   const totalHorizontalPadding = includeScrollBarWidthBuffer
@@ -29,7 +29,6 @@ export function getContainerPadding({
     Math.sign(totalHorizontalPadding) === 1
       ? `0 ${totalHorizontalPadding / 2}px`
       : "0";
-
   return containerPadding;
 }
 export function caclulateColumnProperties(containerDiv?: HTMLDivElement) {

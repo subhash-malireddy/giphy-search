@@ -63,6 +63,8 @@ const GiphyMasonry = ({
     if (containerRef.current === null) return;
 
     const containerDiv = containerRef.current;
+
+    const containerOffsetWidth = containerDiv.offsetWidth;
     const { columnCount, columnGap, columnWidth } =
       caclulateColumnProperties(containerDiv);
 
@@ -78,7 +80,7 @@ const GiphyMasonry = ({
     const containerPadding = getContainerPadding({
       columnCount,
       columnGap,
-      containerDiv,
+      containerOffsetWidth,
       includeScrollBarWidthBuffer,
     });
     containerDiv.style.padding = containerPadding;
