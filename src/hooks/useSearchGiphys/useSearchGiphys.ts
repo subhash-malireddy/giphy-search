@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import { GiphySearchResponse } from "./types";
 import { Maybe } from "../../utility/utilityTypes";
+import axios from "axios";
 
 interface UseSearchForGifsArgs {
   queryString: string;
@@ -30,6 +31,7 @@ const useSearchForGifs = ({
     pageNumber === 1 ? INITIAL_OFFSET : (pageNumber - 1) * NEXT_OFFSET;
 
   const prevQueryString = useRef(queryString);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(
     function fetchData() {
@@ -38,6 +40,10 @@ const useSearchForGifs = ({
         const apiKey = process.env.REACT_APP_giphy_api_key;
         /* istanbul ignore next */
         if (!apiKey) return;
+        /* istanbul ignore next */
+        if (abortControllerRef.current) abortControllerRef.current.abort();
+        abortControllerRef.current = new AbortController();
+
         const searchParams = new URLSearchParams();
         searchParams.append("api_key", apiKey);
         searchParams.append("q", queryString);
@@ -47,6 +53,7 @@ const useSearchForGifs = ({
           setLoading(true);
           const { data } = await axiosInstance.get("", {
             params: searchParams,
+            signal: abortControllerRef.current.signal,
           });
           prevQueryString.current = queryString;
 
@@ -56,6 +63,10 @@ const useSearchForGifs = ({
             pagination: data.pagination,
           }));
         } catch (err) {
+          /* istanbul ignore next */
+          if (axios.isCancel(err)) {
+            console.log("Request canceled", err.message);
+          }
           /* istanbul ignore next */
           if (!!error) return;
           setError(err as Error);
