@@ -1,5 +1,5 @@
-import { getGiphyImgAttributes, getImageForConnectionType } from ".";
-import { GiphyObject } from "../../../../../hooks/useSearchGiphys/types";
+import { getGiphyImgAttributes, getImageForConnectionType } from "./utils";
+import { GiphyObject } from "../../../../hooks/useSearchGiphys/types";
 
 const dummyImgData: Parameters<typeof getGiphyImgAttributes>[0]["imgData"] = {
   url: "url",

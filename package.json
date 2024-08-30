@@ -44,7 +44,7 @@
     "rename": "./scripts/rename.sh",
     "aws:profile": "./scripts/setup-aws-profile.sh giphy-search",
     "lint": "npx eslint --ext .tsx,.ts src/",
-    "test": "jest"
+    "test": "jest --no-cache"
   },
   "dependencies": {
     "axios": "^1.7.3",

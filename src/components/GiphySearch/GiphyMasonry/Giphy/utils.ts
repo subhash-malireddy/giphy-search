@@ -1,4 +1,4 @@
-import { GiphyObject } from "../../../../../hooks/useSearchGiphys/types";
+import { GiphyObject } from "../../../../hooks/useSearchGiphys/types";
 
 type GiphyImageObject = GiphyObject["images"];
 
