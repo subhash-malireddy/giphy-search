@@ -19,7 +19,7 @@ module.exports = {
     "<rootDir>/src/**/*.{ts, tsx}",
     "!**/*.d.ts",
     "!**/index.ts",
-    "!reportWebVitals.ts"
+    "!<rootDir>/src/reportWebVitals.ts"
   ],
   coveragePathIgnorePatterns: [
     "<rootDir>/build/",
