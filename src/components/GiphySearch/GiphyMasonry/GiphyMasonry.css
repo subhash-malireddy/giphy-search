@@ -1,31 +1,3 @@
 .giphys-masonry-container {
-  /* flex: 1 1 auto; */
-  /* column-gap: 8px;
-    break-inside: avoid-column; */
-  /* scrollbar-gutter: stable; */
-  /* width: 100%; */
   transition: padding 0.1s ease-out;
-  /* transition: column-count 0.1s ease-in-out; */
-}
-
-.giphys-masonry {
-  /* gap: 8px !important; */
-}
-
-.giphys-masonry > div {
-  /* width: 200px !important;
-    flex: unset !important;
-    gap: 8px !important; */
-}
-
-.giphy {
-  display: flex;
-  place-content: center;
-  margin-bottom: 8px;
-  break-inside: avoid;
-}
-
-.giphy img {
-  /* width: 100%;
-    object-fit: cover; */
 }

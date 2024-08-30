@@ -1,6 +1,7 @@
 import React from "react";
 import { GiphyObject } from "../../../../hooks/useSearchGiphys/types";
 import { getGiphyImgAttributes, getImageForConnectionType } from "./utils";
+import "./Giphy.css";
 
 type GiphyData = Partial<
   Pick<
