@@ -15,12 +15,6 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
   },
   collectCoverage: true,
-  collectCoverageFrom: [
-    "<rootDir>/src/**/*.{ts, tsx}",
-    "!**/*.d.ts",
-    "!**/index.ts",
-    "!<rootDir>/src/reportWebVitals.ts"
-  ],
   coveragePathIgnorePatterns: [
     "<rootDir>/build/",
   ],

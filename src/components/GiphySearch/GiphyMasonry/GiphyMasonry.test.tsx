@@ -43,10 +43,10 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe("TESTING GifsGrid component", () => {
+describe("TESTING GiphyMasonry component", () => {
   describe("GIVEN the required props", () => {
-    describe("WHEN the component renders successfully", () => {
-      it("THEN displays the mocked Giphy components and applies correct container styles", () => {
+    describe("WHEN the data fetching is successful", () => {
+      it("THEN displays the mocked Giphy components", () => {
         render(
           <GiphyMasonry
             queryString="funny cats"
@@ -66,6 +66,20 @@ describe("TESTING GifsGrid component", () => {
           columnGap: "20px",
           padding: "20px",
         });
+      });
+    });
+
+    describe("WHEN the data fetching is successful and all the resutls are returned", () => {
+      it("THEN displays text saying `That's all we have!!`", () => {
+        render(
+          <GiphyMasonry
+            queryString="funny cats"
+            shouldSearch={true}
+            resetShouldSearch={mockResetShouldSearch}
+            allowSearch={mockAllowSearch}
+          />,
+        );
+        expect(screen.getByText("That's all we have!!")).toBeInTheDocument();
       });
     });
 
@@ -198,7 +212,7 @@ const mockResponse: GiphySearchResponse = {
     response_id: "yn99bjf03owecm4vnko3k2xf2bizsy2v0fx581jz",
   },
   pagination: {
-    total_count: 500,
+    total_count: 2,
     count: 2,
     offset: 0,
   },
