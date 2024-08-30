@@ -71,7 +71,9 @@ See Baseline Webpage in action
 
 ## Run Locally
 
-1. `npm start`
+1. add a .env file at the root having a REACT_APP_giphy_api_key that correponds to your giphy api key.
+2. `npm install` (try using node version 20, if you have any problems with installation).
+3. `npm start`
 
 ## Deploying
 
