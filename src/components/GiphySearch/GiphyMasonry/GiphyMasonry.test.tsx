@@ -3,7 +3,7 @@ import GiphyMasonry from "./GiphyMasonry";
 import useSearchForGifs from "../../../hooks/useSearchGiphys";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
-import { caclulateColumnProperties, getContainerPadding } from "./utils";
+import { calculateColumnProperties, getContainerPadding } from "./utils";
 import { GiphySearchResponse } from "../../../hooks/useSearchGiphys/types";
 
 jest.mock("../../../hooks/useSearchGiphys");
@@ -30,7 +30,7 @@ beforeEach(() => {
     effectiveType: "4g",
   });
 
-  (caclulateColumnProperties as jest.Mock).mockReturnValue({
+  (calculateColumnProperties as jest.Mock).mockReturnValue({
     columnCount: 3,
     columnGap: 20,
     columnWidth: 200,

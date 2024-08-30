@@ -2,7 +2,7 @@ import useSearchForGifs from "../../../hooks/useSearchGiphys";
 import "./GiphyMasonry.css";
 import { useCallback, useEffect, useRef } from "react";
 import Giphy from "./Giphy";
-import { caclulateColumnProperties, getContainerPadding } from "./utils";
+import { calculateColumnProperties, getContainerPadding } from "./utils";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
 
@@ -66,7 +66,7 @@ const GiphyMasonry = ({
 
     const containerOffsetWidth = containerDiv.offsetWidth;
     const { columnCount, columnGap, columnWidth } =
-      caclulateColumnProperties(containerDiv);
+      calculateColumnProperties(containerOffsetWidth);
 
     containerDiv.style.columnCount = `${columnCount}`;
     containerDiv.style.columnWidth = `${columnWidth}px`;

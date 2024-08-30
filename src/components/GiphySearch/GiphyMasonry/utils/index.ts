@@ -1,6 +1,7 @@
 export const GIF_FIXED_WIDTH = 200;
 
 export const DEFAULT_COLUMN_COUNT = 1;
+export const COLUMN_GAP = 8;
 
 export function getContainerPadding({
   columnCount,
@@ -31,17 +32,16 @@ export function getContainerPadding({
       : "0";
   return containerPadding;
 }
-export function caclulateColumnProperties(containerDiv?: HTMLDivElement) {
-  if (!containerDiv)
+
+export function calculateColumnProperties(containerOffsetWidth: number) {
+  if (containerOffsetWidth === 0)
     return { columnCount: 0, columnGap: 0, columnWidth: GIF_FIXED_WIDTH };
 
-  const width = containerDiv.offsetWidth;
-  const columnsCountDecimal = width / GIF_FIXED_WIDTH - 1;
+  const columnsCountDecimal = containerOffsetWidth / GIF_FIXED_WIDTH - 1;
   const columnCount =
     Math.sign(columnsCountDecimal) === 1
       ? Math.floor(columnsCountDecimal)
       : DEFAULT_COLUMN_COUNT;
-  const COLUMN_GAP = 8;
 
   return {
     columnCount,
