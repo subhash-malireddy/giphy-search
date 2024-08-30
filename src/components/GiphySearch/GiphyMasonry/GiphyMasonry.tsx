@@ -86,7 +86,15 @@ const GiphyMasonry = ({
     containerDiv.style.padding = containerPadding;
   });
 
-  if (error) return <>{`error: ${error.message}`}</>;
+  if (error)
+    return (
+      <>{`error: ${
+        // istanbul ignore next
+        error.message.includes("414")
+          ? "Search Text Should be less than 50 characters"
+          : error.message
+      }`}</>
+    );
 
   return (
     <>

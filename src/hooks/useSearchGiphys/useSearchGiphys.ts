@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import { GiphySearchResponse } from "./types";
 import { Maybe } from "../../utility/utilityTypes";
-import axios from "axios";
+import axios, { AxiosError, isAxiosError } from "axios";
 
 interface UseSearchForGifsArgs {
   queryString: string;
@@ -23,7 +23,7 @@ const useSearchForGifs = ({
 }: UseSearchForGifsArgs) => {
   const [response, setResponse] = useState<Maybe<GiphySearchResponse>>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Maybe<Error>>(null);
+  const [error, setError] = useState<Maybe<AxiosError | Error>>(null);
 
   const [pageNumber, setPageNumber] = useState(INITIAL_PAGE);
 
@@ -56,20 +56,32 @@ const useSearchForGifs = ({
             signal: abortControllerRef.current.signal,
           });
           prevQueryString.current = queryString;
+          const giphySearchResponse =
+            /* istanbul ignore next */ !!data && data
+              ? (data as GiphySearchResponse)
+              : null;
+          /* istanbul ignore next */
+          if (!giphySearchResponse) return;
 
           setResponse((prev) => ({
-            data: [...(prev?.data || []), ...data.data],
+            data: [...(prev?.data || []), ...giphySearchResponse.data],
             meta: data.meta,
             pagination: data.pagination,
           }));
         } catch (err) {
           /* istanbul ignore next */
+          if (!!error) return;
+          /* istanbul ignore next */
           if (axios.isCancel(err)) {
             console.log("Request canceled", err.message);
           }
+
+          if (isAxiosError(err) || err instanceof Error) {
+            setError(err);
+            return;
+          }
           /* istanbul ignore next */
-          if (!!error) return;
-          setError(err as Error);
+          setError(Error(String(err)));
         } finally {
           setLoading(false);
           if (resetShouldSearch) {
