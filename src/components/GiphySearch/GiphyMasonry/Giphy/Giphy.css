@@ -1,15 +1,14 @@
 .giphy {
-    display: flex;
-    place-content: center;
-    margin-bottom: 8px;
-    break-inside: avoid;
-    border-radius: 10px;
-    > a{
-        border-radius: inherit;
-    }
-  }
-  
-  .giphy img {
+  display: flex;
+  place-content: center;
+  margin-bottom: 8px;
+  break-inside: avoid;
+  border-radius: 10px;
+  > a {
+    border-radius: inherit;
+    > img {
       object-fit: cover;
       border-radius: inherit;
+    }
   }
+}
