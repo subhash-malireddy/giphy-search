@@ -128,6 +128,37 @@ describe("TESTING GiphyMasonry component", () => {
         expect(loadingMessage).toBeInTheDocument();
       });
     });
+    describe("WHEN there are no results for the given queryString", () => {
+      it("THEN display correct UI", () => {
+        (useSearchForGifs as jest.Mock).mockReturnValueOnce({
+          response: {
+            data: [],
+            meta: mockResponse.meta,
+            pagination: {
+              total_count: 0,
+              count: 0,
+              offset: 0,
+            },
+          },
+          loading: false,
+          error: null,
+          loadMore: jest.fn(),
+        });
+
+        render(
+          <GiphyMasonry
+            queryString="funny cats"
+            shouldSearch={true}
+            resetShouldSearch={mockResetShouldSearch}
+            allowSearch={mockAllowSearch}
+          />,
+        );
+
+        expect(
+          screen.getByText(`Sorry, no reults for - \`funny cats\``),
+        ).toBeInTheDocument();
+      });
+    });
   });
 });
 

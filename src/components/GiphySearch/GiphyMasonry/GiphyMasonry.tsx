@@ -28,6 +28,8 @@ const GiphyMasonry = ({
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const hasGiphyData = response && response.data.length;
+  const hasNoResults =
+    response?.meta.status === 200 && response.pagination.total_count === 0;
 
   /* istanbul ignore next */
   const hasMoreGiphysToLoad = Boolean(
@@ -112,11 +114,15 @@ const GiphyMasonry = ({
           </>
         )}
       </div>
+      {/* loading */}
       {loading && <>Loading ...</>}
+      {/* end of results */}
       {!!hasGiphyData &&
         response.data.length === response.pagination.total_count && (
           <>That's all we have!!</>
         )}
+      {/* No results */}
+      {hasNoResults && <>{`Sorry, no reults for - \`${queryString}\``}</>}
     </>
   );
 };
