@@ -1,6 +1,8 @@
 import React from "react";
 import "./App.css";
 import GiphySearch from "./components/GiphySearch";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -11,6 +13,12 @@ function App() {
 
       <main className="app-main">
         <GiphySearch />
+        <ToastContainer
+          position="bottom-right"
+          stacked
+          pauseOnHover={false}
+          autoClose={3000}
+        />
       </main>
       <footer className="app-footer">
         <h2>

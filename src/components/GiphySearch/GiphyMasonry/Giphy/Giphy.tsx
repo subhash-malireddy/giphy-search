@@ -3,6 +3,7 @@ import { GiphyObject } from "../../../../hooks/useSearchGiphys/types";
 import { getGiphyImgAttributes, getImageForConnectionType } from "./utils";
 import "./Giphy.css";
 import useHover from "../../../../hooks/useHover";
+import { toast } from "react-toastify";
 
 type GiphyData = Partial<
   Pick<
@@ -43,8 +44,9 @@ const Giphy = ({
     /* istanbul ignore next */
     if (!url) return;
     await navigator.clipboard.writeText(url);
-    const copiedStuff = await navigator.clipboard.readText();
-    alert(`copied :: ${copiedStuff}`);
+    // const copiedStuff = await navigator.clipboard.readText();
+    // alert(`copied :: ${copiedStuff}`);
+    toast.info("URL copied to clipboard 📋");
   };
   return (
     <div ref={elementRef} data-testid="giphy_container">
