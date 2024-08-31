@@ -1,8 +1,14 @@
-import React from "react";
-import { render } from "@testing-library/react";
+import {
+  fireEvent,
+  getByAltText,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
 import Giphy from "./Giphy";
 import { getGiphyImgAttributes, getImageForConnectionType } from "./utils";
 import { GiphyObject } from "../../../../hooks/useSearchGiphys/types";
+import { act } from "react-dom/test-utils";
 
 // Mocking utility functions
 jest.mock("./utils", () => ({
@@ -64,11 +70,14 @@ describe("TESTING Giphy component", () => {
   describe("GIVEN all required props", () => {
     describe("WHEN the images prop is provided", () => {
       it("THEN renders the component with correct attributes", () => {
-        const { getByAltText } = render(
-          <Giphy {...dummyGiphyObject} connectionType="4g" />,
-        );
+        render(<Giphy {...dummyGiphyObject} connectionType="4g" />);
 
-        const imgElement = getByAltText("Test Alt Text") as HTMLImageElement;
+        const giphyContainer = screen.getByTestId("giphy_container");
+
+        const imgElement = getByAltText(
+          giphyContainer,
+          "Test Alt Text",
+        ) as HTMLImageElement;
 
         expect(getImageForConnectionType).toHaveBeenCalledWith({
           connectionType: "4g",
@@ -102,19 +111,51 @@ describe("TESTING Giphy component", () => {
       });
     });
 
-    describe("WHEN a callbackRef", () => {
+    describe("WHEN a valid callbackRef is provided", () => {
       it("THEN correctly assigns the ref to the div element", () => {
         const mockRefCallback = jest.fn();
-        const { container } = render(
+
+        render(
           <Giphy
             {...dummyGiphyObject}
             callbackRef={mockRefCallback}
             connectionType="4g"
           />,
         );
+        const giphyContainer = screen.getByTestId("giphy_container");
+        const divObservedForIntersection =
+          giphyContainer.firstChild as HTMLDivElement;
 
         expect(mockRefCallback).toHaveBeenCalledWith(
-          container.firstChild as HTMLDivElement,
+          divObservedForIntersection,
+        );
+      });
+    });
+
+    describe("WHEN the copy link icon-button is ckicked", () => {
+      it("THEN copies the giphy url to clipboard", () => {
+        //@ts-expect-error - because in jest window.navigator.clipboarb evaluates to `undefined`
+        window.navigator.clipboard = {
+          writeText: jest.fn(),
+          readText: jest.fn(),
+        };
+        jest
+          .spyOn(navigator.clipboard, "writeText")
+          .mockImplementation(() => Promise.resolve());
+        render(<Giphy {...dummyGiphyObject} connectionType="4g" />);
+
+        const giphyContainer = screen.getByTestId("giphy_container");
+
+        act(() => fireEvent.mouseOver(giphyContainer));
+
+        const copyLinkIcon = within(giphyContainer).getByTestId("copy_link");
+        expect(copyLinkIcon).toBeInTheDocument();
+
+        act(() => fireEvent.click(copyLinkIcon));
+
+        expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+          dummyGiphyObject.url,
         );
       });
     });

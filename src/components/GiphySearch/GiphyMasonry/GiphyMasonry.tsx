@@ -1,11 +1,11 @@
 import useSearchForGifs from "../../../hooks/useSearchGiphys";
 import "./GiphyMasonry.css";
 import { useCallback, useEffect, useRef } from "react";
-import Giphy from "./Giphy";
 import { calculateColumnProperties, getContainerPadding } from "./utils";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
 import { AxiosError } from "axios";
+import Giphy from "./Giphy";
 
 interface GiphyMasonryProps {
   queryString: string;

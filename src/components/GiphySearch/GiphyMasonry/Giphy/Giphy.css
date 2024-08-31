@@ -4,11 +4,23 @@
   margin-bottom: 8px;
   break-inside: avoid;
   border-radius: 10px;
+  position: relative;
   > a {
     border-radius: inherit;
     > img {
       object-fit: cover;
       border-radius: inherit;
     }
+  }
+  > div.copy-link {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: copy;
+    background-color: #fdfdfd;
+    padding: 2px;
+    height: 28px;
+    border-radius: 5px;
+    opacity: 0.5;
   }
 }
