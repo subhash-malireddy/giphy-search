@@ -3,6 +3,7 @@ import "./App.css";
 import GiphySearch from "./components/GiphySearch";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ErrorBoundary } from "react-error-boundary";
 
 function App() {
   return (
@@ -12,7 +13,16 @@ function App() {
       </header>
 
       <main className="app-main">
-        <GiphySearch />
+        <ErrorBoundary
+          fallback={
+            <>
+              Something wen wrong while showing the search results 😢. Please
+              refresh and try or contact developer.
+            </>
+          }
+        >
+          <GiphySearch />
+        </ErrorBoundary>
         <ToastContainer
           position="bottom-right"
           stacked
