@@ -80,8 +80,15 @@ const useSearchForGifs = ({
             setError(err);
             return;
           }
+
           /* istanbul ignore next */
-          setError(Error(String(err)));
+          console.error("Unexpected error:", err);
+          /* istanbul ignore next */
+          setError(
+            new Error("An unexpected error occurred.", {
+              cause: err,
+            }),
+          );
         } finally {
           setLoading(false);
           if (resetShouldSearch) {

@@ -5,6 +5,7 @@ import Giphy from "./Giphy";
 import { calculateColumnProperties, getContainerPadding } from "./utils";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
 import useNetworkSpeed from "../../../hooks/useNetworkSpeed";
+import { AxiosError } from "axios";
 
 interface GiphyMasonryProps {
   queryString: string;
@@ -86,15 +87,7 @@ const GiphyMasonry = ({
     containerDiv.style.padding = containerPadding;
   });
 
-  if (error)
-    return (
-      <>{`error: ${
-        // istanbul ignore next
-        error.message.includes("414")
-          ? "Search Text Should be less than 50 characters"
-          : error.message
-      }`}</>
-    );
+  if (error) return <SearchError error={error} />;
 
   return (
     <>
@@ -128,3 +121,14 @@ const GiphyMasonry = ({
   );
 };
 export default GiphyMasonry;
+
+// istanbul ignore next
+function SearchError({ error }: { error: AxiosError | Error }) {
+  return (
+    <>{`error: ${
+      error.message.includes("414")
+        ? "Search Text Should be less than 50 characters"
+        : error.message
+    }`}</>
+  );
+}
