@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import "./GiphySearch.css";
 import GiphyMasonry from "./GiphyMasonry";
 const GiphySearch = () => {

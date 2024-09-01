@@ -46,6 +46,14 @@ module.exports = {
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "no-unused-vars": ["error", {
+      "vars": "all",
+      "args": "after-used",
+      "caughtErrors": "all",
+      "destructuredArrayIgnorePattern": "^_",
+      "ignoreRestSiblings": false,
+
+    }],
   },
   reportUnusedDisableDirectives: true,
 };
