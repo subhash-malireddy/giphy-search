@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import App from "./App";
-import GiphySearch from "./components/GiphySearch";
 
 jest.mock("./components/GiphySearch", () => ({
   __esModule: true,

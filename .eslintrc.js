@@ -21,7 +21,10 @@ module.exports = {
     "prettier",
   ],
   rules: {
-    camelcase: "error",
+    camelcase: ["error", {
+      "properties": "never",
+      "ignoreDestructuring": true
+    }],
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "@typescript-eslint/return-await": "off",
@@ -46,14 +49,16 @@ module.exports = {
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "no-unused-vars": ["error", {
-      "vars": "all",
-      "args": "after-used",
-      "caughtErrors": "all",
-      "destructuredArrayIgnorePattern": "^_",
-      "ignoreRestSiblings": false,
-
-    }],
+    "no-unused-vars": [
+      "error",
+      {
+        vars: "all",
+        args: "after-used",
+        caughtErrors: "all",
+        destructuredArrayIgnorePattern: "^_",
+        ignoreRestSiblings: false,
+      },
+    ],
   },
   reportUnusedDisableDirectives: true,
 };

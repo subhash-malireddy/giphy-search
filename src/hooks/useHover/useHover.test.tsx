@@ -1,10 +1,4 @@
-import {
-  act,
-  fireEvent,
-  render,
-  renderHook,
-  screen,
-} from "@testing-library/react";
+import { fireEvent, render, renderHook, screen } from "@testing-library/react";
 import useHover from "./useHover";
 
 afterEach(() => {

@@ -73,7 +73,7 @@ describe("TESTING useNetworkSpeed hook", () => {
       it("THEN sets the network speed state correctly", async () => {
         (global as any).navigator.connection = undefined;
         const mockedAxios = axiosInstance.get as jest.Mock;
-        mockedAxios.mockImplementationOnce((...args: any) => {
+        mockedAxios.mockImplementationOnce(() => {
           return new Promise<{}>((resolve) => {
             setTimeout(() => {
               resolve({});

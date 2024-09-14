@@ -15,15 +15,13 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
   },
   collectCoverage: true,
-  coveragePathIgnorePatterns: [
-    "<rootDir>/build/",
-  ],
+  coveragePathIgnorePatterns: ["<rootDir>/build/"],
   coverageThreshold: {
     global: {
       branches: 100,
       functions: 100,
       lines: 100,
-      statements: 100
-    }
+      statements: 100,
+    },
   },
 };
