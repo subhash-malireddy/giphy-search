@@ -70,7 +70,7 @@ const useSearchForGifs = ({
           }));
         } catch (err) {
           /* istanbul ignore next */
-          if (!!error) return;
+          if (error) return;
           /* istanbul ignore next */
           if (axios.isCancel(err)) {
             console.log("Request canceled", err.message);

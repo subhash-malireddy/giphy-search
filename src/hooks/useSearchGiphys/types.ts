@@ -81,9 +81,9 @@ interface BaseFixedWidth {
   webp_size: string;
   webp: string;
 }
-interface FixedWidth extends BaseFixedWidth {}
+type FixedWidth = BaseFixedWidth
 
-interface FixedWidthDownsampled extends BaseFixedWidth {}
+type FixedWidthDownsampled = BaseFixedWidth
 
 interface FixedWidthStill {
   height: string;

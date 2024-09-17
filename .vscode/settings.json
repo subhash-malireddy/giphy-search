@@ -4,4 +4,5 @@
   "typescript.format.enable": true,
   "javascript.format.enable": true,
   "editor.formatOnSaveMode": "file",
+  "typescript.tsdk": "node_modules/typescript/lib",
 }

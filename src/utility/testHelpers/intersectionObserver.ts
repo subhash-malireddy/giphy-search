@@ -5,7 +5,7 @@ const observerMap = new Map();
 const instanceMap = new Map();
 
 beforeEach(() => {
-  // @ts-ignore
+  //@ts-expect-error because type of jest.fn() cannot be assigned to global.IntersectionObserver. But this is fine here as it this is meant to be used in testing environments only.
   global.IntersectionObserver = jest.fn((cb, options = {}) => {
     const instance = {
       thresholds: Array.isArray(options.threshold)
@@ -28,8 +28,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // @ts-ignore
-  global.IntersectionObserver.mockReset();
+  (global.IntersectionObserver as jest.Mock).mockReset();
   instanceMap.clear();
   observerMap.clear();
 });

@@ -16,7 +16,7 @@ const useNetworkSpeed = (): NetworkSpeed => {
 
   useEffect(() => {
     const updateNetworkSpeed = () => {
-      if (!!navigator.connection) {
+      if (navigator.connection) {
         const connection = navigator.connection;
 
         setNetworkSpeed({
@@ -79,7 +79,7 @@ const useNetworkSpeed = (): NetworkSpeed => {
 
     updateNetworkSpeed();
 
-    if (!!navigator.connection) {
+    if (navigator.connection) {
       const connection = navigator.connection;
       connection.addEventListener("change", updateNetworkSpeed);
 

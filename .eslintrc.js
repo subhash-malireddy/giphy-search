@@ -4,7 +4,11 @@ module.exports = {
     es6: true,
     node: true,
   },
-  extends: ["prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -60,5 +64,14 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      // Apply these settings to test files only
+      files: ['**/*.test.ts', '**/*.spec.ts'], // Adjust the pattern to match your test files
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off', // Disable for test files
+      },
+    },
+  ],
   reportUnusedDisableDirectives: true,
 };
