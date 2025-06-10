@@ -6,8 +6,10 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
+    // "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -17,6 +19,8 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
     project: "./tsconfig.json",
+    projectService: true,
+    tsconfigRootDir: __dirname,
   },
   plugins: [
     "react",
@@ -32,7 +36,6 @@ module.exports = {
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "@typescript-eslint/return-await": "off",
-    "@typescript-eslint/camelcase": "off",
     "react/jsx-curly-brace-presence": ["error", "never"],
     "react/no-danger": "off",
     "no-param-reassign": ["error", { props: false }],
