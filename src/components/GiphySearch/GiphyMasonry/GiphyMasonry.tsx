@@ -62,32 +62,32 @@ const GiphyMasonry = ({
 
   const networkSpeed = useNetworkSpeed();
 
-  useEffect(function setContainerStyling() {
-    if (containerRef.current === null) return;
+  // useEffect(function setContainerStyling() {
+  //   if (containerRef.current === null) return;
 
-    const containerDiv = containerRef.current;
+  //   const containerDiv = containerRef.current;
 
-    const containerOffsetWidth = containerDiv.offsetWidth;
-    const { columnCount, columnGap, columnWidth } =
-      calculateColumnProperties(containerOffsetWidth);
+  //   const containerOffsetWidth = containerDiv.offsetWidth;
+  //   const { columnCount, columnGap, columnWidth } =
+  //     calculateColumnProperties(containerOffsetWidth);
 
-    containerDiv.style.columnCount = `${columnCount}`;
-    containerDiv.style.columnWidth = `${columnWidth}px`;
-    containerDiv.style.columnGap = `${columnGap}px`;
+  //   containerDiv.style.columnCount = `${columnCount}`;
+  //   containerDiv.style.columnWidth = `${columnWidth}px`;
+  //   containerDiv.style.columnGap = `${columnGap}px`;
 
-    const hasWindowScrollBar = Boolean(
-      window.innerWidth - document.documentElement.clientWidth,
-    );
-    /* istanbul ignore next */
-    const includeScrollBarWidthBuffer = hasWindowScrollBar ? false : true;
-    const containerPadding = getContainerPadding({
-      columnCount,
-      columnGap,
-      containerOffsetWidth,
-      includeScrollBarWidthBuffer,
-    });
-    containerDiv.style.padding = containerPadding;
-  });
+  //   const hasWindowScrollBar = Boolean(
+  //     window.innerWidth - document.documentElement.clientWidth,
+  //   );
+  //   /* istanbul ignore next */
+  //   const includeScrollBarWidthBuffer = hasWindowScrollBar ? false : true;
+  //   const containerPadding = getContainerPadding({
+  //     columnCount,
+  //     columnGap,
+  //     containerOffsetWidth,
+  //     includeScrollBarWidthBuffer,
+  //   });
+  //   containerDiv.style.padding = containerPadding;
+  // });
 
   if (error) return <SearchError error={error} />;
 

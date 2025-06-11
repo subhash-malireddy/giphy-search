@@ -4,11 +4,13 @@
   gap: 16px;
   height: 100%;
   padding: 16px;
+  align-items: center;
 }
 
 .search-form {
   display: flex;
   gap: 16px;
+  width: 100%;
 }
 
 .search-input {

@@ -49,25 +49,39 @@ const Giphy = ({
     toast.info("URL copied to clipboard 📋");
   };
   return (
-    <div ref={elementRef} data-testid="giphy_container">
+    <div
+      ref={elementRef}
+      data-testid="giphy_container"
+      style={{ width: "100%" }}
+    >
       <div
         className="giphy"
         key={id}
         style={{
-          height: Number(imgData.height),
-          width: Number(imgData.width),
+          minHeight: Number(imgData.height),
+          // width: Number(imgData.width),
+          // width: "200px",
+          width: "100%",
           backgroundColor: "rebeccapurple",
         }}
         ref={callbackRef}
       >
-        <a href={url}>
+        <a
+          href={url}
+          style={{ width: "100%", height: "100%", display: "block" }}
+        >
           <img
             srcSet={srcSet}
             src={src}
             alt={altText}
             loading="lazy"
-            height={Number(imgData.height)}
-            width={Number(imgData.width)}
+            // height={Number(imgData.height)}
+            // width={Number(imgData.width)}
+            style={{
+              width: "100%",
+              objectFit: "cover",
+              // cursor: "pointer",
+            }}
           />
         </a>
         {isHovering && (
